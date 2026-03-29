@@ -6,10 +6,14 @@ namespace FunFact.Screen.Adapter
     public class UiSafeArea : MonoBehaviour
     {
         private RectTransform _rt;
+        private Canvas _canvas;
+        private RectTransform _canvasRT;
 
         private void Awake()
         {
             _rt = GetComponent<RectTransform>();
+            _canvas = GetComponentInParent<Canvas>();
+            _canvasRT = _canvas.GetComponent<RectTransform>();
         }
 
         private void Update()
@@ -19,10 +23,18 @@ namespace FunFact.Screen.Adapter
             rect.y /= UnityEngine.Screen.height;
             rect.width /= UnityEngine.Screen.width;
             rect.height /= UnityEngine.Screen.height;
+            
+            /*
             _rt.anchorMin = rect.min;
             _rt.anchorMax = rect.max;
             _rt.anchoredPosition = Vector2.zero;
             _rt.sizeDelta = Vector2.zero;
+            */
+            
+            var targetSize = _canvasRT.rect.size * (rect.size - _rt.anchorMax + _rt.anchorMin);
+            
+            _rt.sizeDelta = targetSize;
+            _rt.anchoredPosition = _canvasRT.rect.size * (rect.position-_rt.anchorMin) + targetSize * _rt.pivot;
         }
     }
 }

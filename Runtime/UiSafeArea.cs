@@ -5,6 +5,8 @@ namespace FunFact.Screen.Adapter
     [RequireComponent(typeof(RectTransform))]
     public class UiSafeArea : MonoBehaviour
     {
+        [SerializeField] private float _minAspect = 9f / 21f;
+        [SerializeField] private float _maxAspect = 3f / 4f;
         private RectTransform _rt;
         private Canvas _canvas;
         private RectTransform _canvasRT;
@@ -19,6 +21,20 @@ namespace FunFact.Screen.Adapter
         private void Update()
         {
             var rect = UnityEngine.Screen.safeArea;
+
+            if (rect.width / rect.height < _minAspect)
+            {
+                var delta = rect.height - rect.width / _minAspect;
+                rect.height -= delta;
+                rect.y += delta / 2;
+            }
+            else if (rect.width / rect.height > _maxAspect)
+            {
+                var delta = rect.width - rect.height * _maxAspect;
+                rect.width -= delta;
+                rect.x += delta / 2;
+            }
+            
             rect.x /= UnityEngine.Screen.width;
             rect.y /= UnityEngine.Screen.height;
             rect.width /= UnityEngine.Screen.width;

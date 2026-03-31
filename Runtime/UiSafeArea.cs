@@ -18,25 +18,7 @@ namespace FunFact.Screen.Adapter
 
         private void Update()
         {
-            var rect = UnityEngine.Screen.safeArea;
-
-            if (rect.width / rect.height < Settings.Instance.MinAspect)
-            {
-                var delta = rect.height - rect.width / Settings.Instance.MinAspect;
-                rect.height -= delta;
-                rect.y += delta / 2;
-            }
-            else if (rect.width / rect.height > Settings.Instance.MaxAspect)
-            {
-                var delta = rect.width - rect.height * Settings.Instance.MaxAspect;
-                rect.width -= delta;
-                rect.x += delta / 2;
-            }
-            
-            rect.x /= UnityEngine.Screen.width;
-            rect.y /= UnityEngine.Screen.height;
-            rect.width /= UnityEngine.Screen.width;
-            rect.height /= UnityEngine.Screen.height;
+            var rect = Settings.Instance.NormalizedArea;
             
             /*
             _rt.anchorMin = rect.min;
